@@ -3,18 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mis cuentas regresivas</title>
+
+<title>Countdown Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#0f172a;
+    background:#090b14;
+    color:#fff;
+    font-family:'Orbitron',sans-serif;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -22,58 +27,188 @@ body{
 }
 
 .container{
-    width:380px;
+    width:1100px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
 }
 
 .card{
-    background:#1e293b;
-    color:#fff;
-    padding:18px 20px;
-    margin:12px 0;
-    border-radius:12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 5px 12px rgba(0,0,0,.35);
+
+    background:linear-gradient(145deg,#121826,#1d273b);
+    border:1px solid #00eaff55;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+
+    box-shadow:
+    0 0 15px #00eaff33,
+    inset 0 0 10px #00eaff11;
+
+    transition:.35s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 0 25px #00eaff,
+    0 0 60px #00eaff55;
+
+}
+
+.logo{
+
+    font-size:55px;
+    margin-bottom:15px;
+
 }
 
 .nombre{
-    font-size:20px;
-    font-weight:bold;
+
+    font-size:23px;
+    margin-bottom:20px;
+    color:#00eaff;
+
 }
 
-.dias{
-    font-size:28px;
-    font-weight:bold;
-    color:#38bdf8;
+.timer{
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+
 }
+
+.box{
+
+    background:#0e1320;
+    border-radius:10px;
+    padding:10px;
+
+}
+
+.numero{
+
+    font-size:25px;
+    color:#00ff88;
+    font-weight:bold;
+
+}
+
+.texto{
+
+    font-size:11px;
+    margin-top:5px;
+    color:#ccc;
+
+}
+
 </style>
+
 </head>
 <body>
 
 <div class="container">
 
-    <div class="card">
-        <div class="nombre">🏦 Scotiabank</div>
-        <div class="dias">61 días</div>
-    </div>
+<div class="card">
 
-    <div class="card">
-        <div class="nombre">🏦 BBVA</div>
-        <div class="dias">61 días</div>
-    </div>
+<div class="logo">🏦</div>
 
-    <div class="card">
-        <div class="nombre">📶 Claro</div>
-        <div class="dias">90 días</div>
-    </div>
+<div class="nombre">Scotiabank</div>
 
-    <div class="card">
-        <div class="nombre">📱 Bitel</div>
-        <div class="dias">34 días</div>
-    </div>
+<div class="timer">
+<div class="box"><div id="s_d" class="numero"></div><div class="texto">Días</div></div>
+<div class="box"><div id="s_h" class="numero"></div><div class="texto">Horas</div></div>
+<div class="box"><div id="s_m" class="numero"></div><div class="texto">Min</div></div>
+<div class="box"><div id="s_s" class="numero"></div><div class="texto">Seg</div></div>
+</div>
 
 </div>
+
+<div class="card">
+
+<div class="logo">🏦</div>
+
+<div class="nombre">BBVA</div>
+
+<div class="timer">
+<div class="box"><div id="b_d" class="numero"></div><div class="texto">Días</div></div>
+<div class="box"><div id="b_h" class="numero"></div><div class="texto">Horas</div></div>
+<div class="box"><div id="b_m" class="numero"></div><div class="texto">Min</div></div>
+<div class="box"><div id="b_s" class="numero"></div><div class="texto">Seg</div></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="logo">📶</div>
+
+<div class="nombre">Claro</div>
+
+<div class="timer">
+<div class="box"><div id="c_d" class="numero"></div><div class="texto">Días</div></div>
+<div class="box"><div id="c_h" class="numero"></div><div class="texto">Horas</div></div>
+<div class="box"><div id="c_m" class="numero"></div><div class="texto">Min</div></div>
+<div class="box"><div id="c_s" class="numero"></div><div class="texto">Seg</div></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="logo">📱</div>
+
+<div class="nombre">Bitel</div>
+
+<div class="timer">
+<div class="box"><div id="bt_d" class="numero"></div><div class="texto">Días</div></div>
+<div class="box"><div id="bt_h" class="numero"></div><div class="texto">Horas</div></div>
+<div class="box"><div id="bt_m" class="numero"></div><div class="texto">Min</div></div>
+<div class="box"><div id="bt_s" class="numero"></div><div class="texto">Seg</div></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function countdown(date,ids){
+
+const end=new Date(date).getTime();
+
+setInterval(()=>{
+
+const now=new Date().getTime();
+
+const diff=end-now;
+
+if(diff<=0)return;
+
+const d=Math.floor(diff/86400000);
+const h=Math.floor(diff%86400000/3600000);
+const m=Math.floor(diff%3600000/60000);
+const s=Math.floor(diff%60000/1000);
+
+document.getElementById(ids[0]).textContent=d;
+document.getElementById(ids[1]).textContent=h;
+document.getElementById(ids[2]).textContent=m;
+document.getElementById(ids[3]).textContent=s;
+
+},1000);
+
+}
+
+countdown("2026-10-06T00:00:00",["s_d","s_h","s_m","s_s"]);
+countdown("2026-10-06T00:00:00",["b_d","b_h","b_m","b_s"]);
+countdown("2026-11-07T00:00:00",["c_d","c_h","c_m","c_s"]);
+countdown("2026-09-09T00:00:00",["bt_d","bt_h","bt_m","bt_s"]);
+
+</script>
 
 </body>
 </html>
